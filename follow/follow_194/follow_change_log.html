@@ -1,0 +1,134 @@
+<!DOCTYPE HTML><html><head><meta charset="utf-8"></head>
+<body><pre>2019-11-30
+
+	* Revision: 194
+	- better synchronization algorithm for audio
+	- URL parameter vol=nn to set synthesizer volume
+
+2019-11-21
+
+	* Revision: 193
+	- better note window calculation taking both the current and next note
+	duration into account
+	- (correct) notes played too early (and held down) are now also accepted as
+	soon as the time window shifts too the next note.
+	- following/playback is also started on playing the correct first note
+
+2019-11-19
+
+	* Revision: 192
+	- scrolling on a touch device always stops following/playing
+	- new menu checkbox to hides the cursor
+	- better logic for keybord play simulation (space bar, right arrow)
+	- bug with cursor timing causing jump backwards (when short note after long
+	one is played too early)
+
+2019-11-18
+
+	* Revision: 191
+	- in side scroll mode: implement own horizontal scrolling by intercepting
+	touchMove and preventing the default action. This avoids an issue with
+	y-overflow:hidden on iOS/iPhone.
+	- stop playback on touchMove in the notation area
+
+2019-11-05
+
+	* Revision: 190
+	- fast jump at repeat in side scroll mode
+	- symmetric time window around each note in all follow modes
+
+2019-11-04
+
+	* Revision: 189
+	- playback synchronizes to correctly played chords.
+
+2019-11-01
+
+	* Revision: 188
+	- bug in mergeVoices when keeping shortest rest
+
+2019-10-25
+
+	* Revision: 187
+	- set time window delay dependent on the follow mode. In adaptive tempo
+	modes the delay is 0.5 of the current note duration In constant tempo modes
+	it is 0.8 of the current note duration The smaller delay value allows for
+	better speed up behaviour
+
+2019-10-24
+
+	* Revision: 186
+	- when a chord/note is played correctly do not advance the cursor when the
+	same chord/note is placed multiple times (within the time window)
+
+	* Revision: 185
+	- shifted start time of the (next) note checking window to 0.8 of the
+	current note duration. (was 0.5)
+
+2019-10-23
+
+	* Revision: 184
+	- isvgTwoSys is not needed (because == isvgPrev)
+
+	* Revision: 183
+	- staff selection bug in two system mode
+	- start only at midi 60 (middle C)
+
+2019-09-17
+
+	* Revision: 181
+	- latency display span added to the menu bar
+
+	* Revision: 180
+	- add audio latency parameter and display in menu bar
+	- cursor movement identical in all follow modes (cursor moves after half the
+	note duration ot the whole note duration)
+
+2019-09-12
+
+	* Revision: 179
+	- stop audio when a note is not played more than 1 second after the time due
+	- horizontal scroll animation with average speed (pendulum model)
+
+2019-09-01
+
+	* Revision: 178
+	- separate controls for scale (side scroll mode) and page width (page scroll
+	mode)
+	- new URL option "scl=..." to set the scale for side scroll mode
+	- set CSS overflow-y of notation area to "hidden" in side scroll mode
+	- stop side scrolling when scollLeft == 0
+	- with URL option "nocnt" and without using the start button, treat the firts
+	played note as a start signal (toggleStart) and as a real note (checkMidi)
+
+2019-08-29
+
+	* Revision: 177
+	- ridiculous trick to get a scrolling div inside an iframe on the iPad (iOS
+	ignores CSS width but not min-width).
+	https://stackoverflow.com/questions/23083462/how-to-get-an-iframe-to-be-
+	responsive-in-ios-safari
+
+2019-08-26
+
+	* Revision: 176
+	- revert the scaling change in the previous version as it scales relative to
+	the window width in stread of the score width.
+	- add new URL option shrnk that sets the %%maxshrink command in ABC when the
+	side scroll mode is used.
+	- default value of opt.shrnk == 0, which results in the widest note spacing.
+
+	* Revision: 175
+	- in side scroll mode, use SVG scaling in stead of ABC scaling
+	- increase max scale factor to 4
+
+2019-08-25
+
+	* Revision: 174
+	- unlock audio context and html player in parallel, both initiated from
+	button handler doUnlock
+	- add measure numbers (option mnum = 0 for xml2abc.vertaal)
+	- replace play event handler by play.then promise
+	- add loudpeaker icon with mute handler
+
+</pre></body></html>

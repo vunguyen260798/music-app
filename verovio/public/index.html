@@ -23,18 +23,6 @@
         <script type="text/javascript" language="javascript" src="javascript/midi-player/wildwebmidi.js"></script>
         <script type="text/javascript" language="javascript" src="javascript/midi-player/midiplayer.js"></script>
         <link rel="stylesheet" href="css/midiplayer.css" />
-        <style>
-            .sheet_header{
-                padding:10px;
-                border:1px solid;
-            }
-            .sheet_body{
-                border:1px solid;
-                height:70%;
-                padding:10px
-            }
-          
-        </style>
     </head>
     <body style="margin: 0px;">
 
@@ -87,7 +75,6 @@
             var zoom = 50;
             var pageHeight = $("#svg_output").height() 
             var pageWidth =  $("#svg_output").width()*2 
-            console.log(pageWidth)
             ////////////////////////////////////////////////
             /* A variable for storing the highlighted ids */
             ////////////////////////////////////////////////
@@ -95,8 +82,7 @@
             var isPlaying = false;
 
             function setOptions() {
-               // pageHeight = $(document).height() * 1000 / zoom ;
-               // pageWidth = $(document).width() * 1000 / zoom ;
+
                 options = {
                             pageHeight: pageHeight,
                             pageWidth: pageWidth,

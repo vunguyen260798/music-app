@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="abc2svg-1.js"></script>
+    <script src="xmlplay_emb.js"></script>
+    <script src="abcemb-1.js"></script>
+    <!-- <script src="http://moinejf.free.fr/js/abc2svg-1.js" type="text/javascript"></script>
+	<script src="http://moinejf.free.fr/js/abcemb-1.js" type="text/javascript"></script>
+for rendering, and add
+	<script src="http://moinejf.free.fr/js/play-1.js" type="text/javascript"></script> -->
+    <script>
+        // Only needed if the name of a local midi-js sound font differs from the GM standard name
+        var instTab = {
+            25: 'my_steel_guitar',
+            36: 'yam_plec_bass',
+            128: 'synth_drum'
+        };
+        // var withRT = 0; // 0 == disable real time synthesis == use always midi-js
+        // var instUrl = ''; // path to directory containing sound fonts
+    </script>
+    <style>
+        .dlog {
+            display: none;
+            background: lightblue;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30%;
+            padding: 10px;
+            transform: translate(-50%, -50%);
+            z-index: 9;
+        }
+
+        .abc svg {
+            max-width: 600px;
+            background: #f8f8f8;
+            display: block;
+            cursor: pointer;
+        }
+
+        .ewd svg {
+            max-width: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    
+%abc-2.2
+%%pagewidth 12cm
+%%bgcolor white
+%%topspace 0
+%%composerspace 0
+%%leftmargin 0.8cm
+%%rightmargin 0.8cm
+X:2
+T:Old Sir Simon the King
+C:Trad.
+S:Offord MSS          % from Offord manuscript
+N:see also Playford   % reference note
+M:9/8
+R:SJ                  % slip jig
+N:originally in C     % transcription note
+K:G
+D|GFG GAG G2D|GFG GAG F2D|EFE EFE EFG|A2G F2E D2:|
+D|GAG GAB d2D|GAG GAB c2D|[1 EFE EFE EFG|A2G F2E D2:|\ % no line-break in score
+M:12/8                % change of meter
+[2 E2E EFE E2E EFG|\  % no line-break in score
+M:9/8                 % change of meter
+A2G F2E D2|]
+
+  
+</body>
+
+</html>
