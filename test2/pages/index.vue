@@ -1,8 +1,44 @@
+
 <template>
     <v-row >
 		<v-col cols="8" v-bind:style="{padding:'0px'}">
 			<v-card tile>
-				<v-toolbar flat></v-toolbar>
+				<v-toolbar id="midiPlayer_div" flat >
+					<v-row  >
+						<v-col>
+							<v-btn-toggle dense id="midiPlayer_tool">
+								<v-btn id="midiPlayer_play" onClick="play()"><v-icon>mdi-play</v-icon></v-btn>
+								<v-btn id="midiPlayer_stop" onClick="stop()"><v-icon>mdi-stop</v-icon></v-btn>
+								<v-btn id="midiPlayer_pause" onClick="pause()"><v-icon>mdi-pause</v-icon></v-btn>
+							</v-btn-toggle>
+						</v-col>
+						<v-col class="d-flex align-center justify-center">
+								<span id="midiPlayer_playingTime">00:00</span>
+								<span>/</span>
+								<span id="midiPlayer_totalTime">03:00</span>
+						</v-col>	
+						
+					</v-row>
+					<v-row id="midiPlayer_bar">
+						<div id="midiPlayer_progress"></div>
+					</v-row>
+                    <!-- <div id="midiPlayer_div">
+                        <div id="midiPlayer_tool" >
+                            <div class="">
+                            <a id="midiPlayer_play" class="icon play" onclick="play()" ></a>
+                            <a id="midiPlayer_stop" class="icon stop" onclick="stop()" ></a>
+                            <a  id="midiPlayer_pause" class="icon pause" onclick="pause()"></a>
+                            </div>
+                            <div class="col-sm-3">
+                                <span id="midiPlayer_playingTime">0:00</span>
+                                <span id="midiPlayer_totalTime">03:00</span>
+                            </div>
+                        </div>
+                        <div id="midiPlayer_bar">
+                                <div class="progress_bar" id="midiPlayer_progress"></div>
+                        </div>
+                    </div> -->
+				</v-toolbar>
 				<v-divider></v-divider>
 				<div id="svg_output" v-bind:style="{height:'900px',overflow:'scroll'}"></div>
 			</v-card>
@@ -26,7 +62,7 @@ export default {
 	mounted(){
 		console.log("ok")
 		/* create the toolkit instance */
-		var vrvToolkit = new verovio.toolkit();
+		var vrvToolkit = new verovio.toolkit();  
 			var page = 2;
 			var zoom = 50;
 			var pageHeight = 6000;
@@ -81,6 +117,76 @@ export default {
                 });
 			}
 			loadFile()
+			function play_midi() {
+                if (isPlaying == false) {
+                    var base64midi = vrvToolkit.renderToMIDI();
+                    var song = 'data:audio/midi;base64,' + base64midi;
+                    $("#player").show();
+                    $("#player").midiPlayer.play(song);
+                    isPlaying = true;
+                }
+            }
+
+            //////////////////////////////////////////////////////
+            /* Two callback functions passed to the MIDI player */
+            //////////////////////////////////////////////////////
+            var midiUpdate = function(time) {
+                // time needs to - 400 for adjustment
+                var vrvTime = Math.max(0, time - 400);
+                var elementsattime = vrvToolkit.getElementsAtTime(vrvTime);
+                if (elementsattime.page > 0) {
+                    if (elementsattime.page != page) {
+                        page = elementsattime.page;
+                        loadPage();
+                    }
+                    if ((elementsattime.notes.length > 0) && (ids != elementsattime.notes)) {
+                        ids.forEach(function(noteid) {
+                            if ($.inArray(noteid, elementsattime.notes) == -1) {
+                                $("#" + noteid).attr("fill", "#000").attr("stroke", "#000");
+                            }
+                        });
+                        ids = elementsattime.notes;
+                        ids.forEach(function(noteid) {
+                            if ($.inArray(noteid, elementsattime.notes) != -1) {
+                                $("#" + noteid).attr("fill", "#c00").attr("stroke", "#c00");;
+                            }
+                        });
+                    }
+                }
+            }
+
+            var midiStop = function() {
+                ids.forEach(function(noteid) {
+                    $("#" + noteid).attr("fill", "#000").attr("stroke", "#000");
+                });
+                $("#player").hide();
+                isPlaying = false;
+            }
+
+            $(document).ready(function() {
+
+                $(window).keyup(function(event){
+                    ////////////////////////////////
+                    /* Key events 'p' for playing */
+                    ////////////////////////////////
+                    if (event.keyCode == 80) {
+                        play_midi();
+                    }
+                });
+
+                $(window).resize(function(){
+                    applyZoom();
+                });
+
+                $("#player").midiPlayer({
+                    color: "#c00",
+                    onUpdate: midiUpdate,
+                    onStop: midiStop,
+                    width: $("#midiPlayer_div").width()
+                });
+
+                loadFile();
+            });
 		/* read the MEI file */
 	//	mei = fs.readFileSync("hello.mei");
 		/* load the MEI data as string into the toolkit */

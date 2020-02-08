@@ -391,6 +391,7 @@ function runConversion() {
         midiPlayer_progress = document.getElementById('midiPlayer_progress');
         midiPlayer_playingTime = document.getElementById('midiPlayer_playingTime');
         midiPlayer_play = document.getElementById('midiPlayer_play');
+        console.log(midiPlayer_bar)
         midiPlayer_pause = document.getElementById('midiPlayer_pause');
         midiPlayer_stop = document.getElementById('midiPlayer_stop');
         midiPlayer_totalTime = document.getElementById('midiPlayer_totalTime');
