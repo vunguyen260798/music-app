@@ -116,16 +116,18 @@ function processAudio(buffer_loc, size) {
 function updateProgress(current, total) {
     midiPlayer_currentSamples = current;
     midiPlayer_totalSamples = total;
-    midiPlayer_progress.style.width = (current / total * 100) + '%';
+  //  midiPlayer_progress.style.width = (current / total * 100) + '%';
+    console.log("haha")
     midiPlayer_playingTime.innerHTML = samplesToTime(current);
     midiPlayer_totalTime.innerHTML = samplesToTime(total);
     
+    let progress=(current/total) * 100
     var millisec = Math.floor(current * 1000 / SAMPLE_RATE / midiPlayer_updateRate);
     if (midiPlayer_lastMillisec > millisec) {
         midiPlayer_lastMillisec = 0;
     }
     if (millisec > midiPlayer_lastMillisec) {
-        if (midiPlayer_onUpdate != null) midiPlayer_onUpdate(millisec * midiPlayer_updateRate);
+        if (midiPlayer_onUpdate != null) midiPlayer_onUpdate(millisec * midiPlayer_updateRate,progress);
         //console.log(millisec * UPDATE_RATE);
     }
     midiPlayer_lastMillisec = millisec;
@@ -189,7 +191,6 @@ MidiModule(MidiPlayer);
  
 function onAudioProcess(audioProcessingEvent) {
     var generated = circularBuffer.use();
-    
     if (!generated && midiPlayer_drainBuffer) {
         // wait for remaining buffer to drain before disconnect audio
         pauseAudio();
@@ -254,8 +255,11 @@ function convertFile(file, data) {
 function pause() {
     _EM_signalStop = 2;
     circularBuffer.reset();
-    midiPlayer_play.style.display = 'inline-block';
-    midiPlayer_pause.style.display = 'none';
+    /**
+     * Vu block this code
+     */
+    ///  midiPlayer_play.style.display = 'inline-block';
+    //midiPlayer_pause.style.display = 'none';
 }
 
 function play() {
@@ -274,9 +278,12 @@ function play() {
     }
     
     _EM_signalStop = 0;
-    midiPlayer_play.style.display = 'none';
-    midiPlayer_pause.style.display = 'inline-block';
-    midiPlayer_stop.style.display = 'inline-block';
+    /**
+     * Vu remove style css here
+     */
+    // midiPlayer_play.style.display = 'none'; 
+    // midiPlayer_pause.style.display = 'inline-block';
+    // midiPlayer_stop.style.display = 'inline-block';
     // add small delay so UI can update.
     setTimeout(runConversion, 100);
 }
@@ -288,13 +295,16 @@ function stop() {
     
     midiPlayer_totalSamples = 0;
     midiPlayer_currentSamples = 0;
-    midiPlayer_progress.style.width = '0%';
+   // midiPlayer_progress.style.width = '0%';
     midiPlayer_playingTime.innerHTML = "00.00";
     midiPlayer_totalTime.innerHTML = "00.00";
     
-    midiPlayer_play.style.display = 'none';
-    midiPlayer_pause.style.display = 'none';
-    midiPlayer_stop.style.display = 'none';
+    /**
+     * Vu block this code
+     */
+    // midiPlayer_play.style.display = 'none';
+    // midiPlayer_pause.style.display = 'none';
+    // midiPlayer_stop.style.display = 'none';
     
     if (midiPlayer_onStop != null) midiPlayer_onStop(); 
 }
@@ -342,6 +352,7 @@ function runConversion() {
         options.updateRate = Math.max(options.updateRate, 10);
         
         $.fn.midiPlayer.play = function (song) {
+            console.log("hihihi")
             if (midiPlayer_isLoaded == false) {
                 midiPlayer_input = song;
             }
@@ -378,20 +389,18 @@ function runConversion() {
             // .append("<a class=\"icon play\" id=\"midiPlayer_play\" onclick=\"play()\"></a>")
             // .append("<a class=\"icon pause\" id=\"midiPlayer_pause\" onclick=\"pause()\"></a>")
             // .append("<a class=\"icon stop\" id=\"midiPlayer_stop\" onclick=\"stop()\"></a>");
-            console.log(options.width)
         // $("#midiPlayer_div").css("width", options.width + 200);
-        $("#midiPlayer_bar").css("width", options.width);
-        $("#midiPlayer_progress").css("background", options.color);
+       // $("#midiPlayer_bar").css("width", options.width);
+       // $("#midiPlayer_progress").css("background", options.color);
         
         // Assign the global variables
         midiPlayer_onStop = options.onStop;
         midiPlayer_onUpdate = options.onUpdate; 
         midiPlayer_updateRate = options.updateRate;
-        midiPlayer_bar = document.getElementById('midiPlayer_bar');
-        midiPlayer_progress = document.getElementById('midiPlayer_progress');
+        //midiPlayer_bar = document.getElementById('midiPlayer_bar');
+       // midiPlayer_progress = document.getElementById('midiPlayer_progress');
         midiPlayer_playingTime = document.getElementById('midiPlayer_playingTime');
         midiPlayer_play = document.getElementById('midiPlayer_play');
-        console.log(midiPlayer_bar)
         midiPlayer_pause = document.getElementById('midiPlayer_pause');
         midiPlayer_stop = document.getElementById('midiPlayer_stop');
         midiPlayer_totalTime = document.getElementById('midiPlayer_totalTime');
@@ -399,6 +408,7 @@ function runConversion() {
 
         var pageDragStart = 0;
         var barDragStart = 0;
+        /*
         midiPlayer_bar.addEventListener('mousedown', function (e) {
             if (midiPlayer_totalSamples == 0) return;
 
@@ -421,13 +431,14 @@ function runConversion() {
         });
         
         function updateDragging(pageX) {
+            console.log("12345")
             var posX =  barDragStart + (pageX - pageDragStart);
             if (posX >= 0 && posX <= options.width) {
                 var percent = posX / options.width;
                 midiPlayer_currentSamples = percent * midiPlayer_totalSamples | 0;
                 updateProgress(midiPlayer_currentSamples, midiPlayer_totalSamples);
             }
-        }
+        }*/
         
         return;
     };
